@@ -3,18 +3,24 @@ from socket import socket
 from threading import Thread
 
 
-def processar(conexao, vetor , valor, tam ):
+def processar(conexao, vetor , valor, tam):
     print("Processando Requisição...")
-    sleep(10)
-    for i in range(len(vetor) - 1):
+    i = 0
+    n = len(vetor) - 1
+    while i < n:
         if vetor[i] == valor:
-            conexao.sendall('Encontrado na posição: ', i+tam)
-            conexao.close()
-            print("Processamento Encerrado")
+            i = i + (tam/2)
+            conexao.sendall(bytes(str("Encontrado na posição: ", i), "UTF-8"))
+            print("Encontrado na posição: ",i)
+            print("Processamento Encerrado!")
 
-    conexao.send("Não encontrado!")
+
+        i = i + 1
+
+    conexao.sendall(bytes(str("Não Encontrado!"), "UTF-8"))
     conexao.close()
     print("Processamento Encerrado!")
+
 
 
 def escutar():
@@ -29,21 +35,23 @@ def escutar():
         try:
             conexao, origem = sck.accept()
             print("Nova conexão estabelecida...")
-            sck.accept()
-            vetor= sck.recv(1000)
+            vetor = conexao.recv(1000).decode("UTF-8")
             print("Vetor aceito...")
-            sck.accept()
-            valor = sck.recv(1000)
+            print(vetor)
+            valor = conexao.recv(1000).decode("UTF-8")
             print("Valor a ser buscado aceito...")
-            sck.accept()
-            tam = sck.recv(1000)
+            print(valor)
+            tam = conexao.recv(1000).decode("UTF-8")
             print("Tamanho do vetor aceito...")
-            thread = Thread(target=processar, args=(conexao, vetor, valor, tam ))
-            thread.start()
-            print(f"Thread iniciada - {thread}")
+            print(tam)
+            processar(conexao, vetor, valor, tam)
+
+            #thread = Thread(target=processar, args=(conexao, vetor, valor, tam ))
+            #thread.start()
+            #print(f"Thread iniciada - {thread}")
 
         except KeyboardInterrupt:
-            sck.close()
+            conexao.close()
             print("Programa Encerrado!")
 
 

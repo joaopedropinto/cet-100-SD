@@ -17,23 +17,23 @@ def requisicao(vet, val):
     sck1.connect(server_info1)
     print("Conexao com o servidor1 foi aceita!")
 
-    sck1.sendall(array1)
-    sck1.sendall( val.to_bytes(2,  byteorder="little"))
+    sck1.sendall(bytes(str(array1), "UTF-8"))
+
+    sck1.sendall(bytes(str(val), "UTF-8"))
 
     server_info2 = ('127.0.0.1', 3002)
     sck2.connect(server_info2)
     print("Conexao com o servidor2 foi aceita!")
 
-    sck2.sendall(array2)
-    sck2.sendall(val.to_bytes(2,  byteorder="little"))
-
-    sck2.sendall(tam.to_bytes(2,  byteorder="little"))
+    sck2.sendall(bytes(str(array2), "UTF-8"))
+    sck2.sendall(bytes(str(val), "UTF-8"))
+    sck2.sendall(bytes(str(tam), "UTF-8"))
 
     print("Aguardando dados servidor1...")
-    dados_recebidos1 = sck1.recv(1000)
+    dados_recebidos1 = sck1.recv(1000).decode("UTF-8")
 
     print("Aguardando dados servidor2...")
-    dados_recebidos2 = sck2.recv(1000)
+    dados_recebidos2 = sck2.recv(1000).decode("UTF-8")
 
     print(f"Dado recebido do servidor1 {dados_recebidos1}")
     sck1.close()
