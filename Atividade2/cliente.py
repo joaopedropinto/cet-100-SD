@@ -1,3 +1,4 @@
+from time import sleep
 from socket import socket
 import random
 import numpy
@@ -34,6 +35,7 @@ def requisicao(vet, val):
 
     print("Aguardando dados servidor2...")
     dados_recebidos2 = sck2.recv(1000).decode("UTF-8")
+
 
     print(f"Dado recebido do servidor1 {dados_recebidos1}")
     sck1.close()

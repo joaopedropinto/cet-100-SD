@@ -4,19 +4,23 @@ from threading import Thread
 
 
 def processar(conexao, vetor , valor):
+    sleep(5)
     print("Processando Requisição...")
     i = 0
     n = len(vetor) - 1
     while i < n:
+
         if vetor[i] == valor:
-            conexao.sendall(bytes(str("Encontrado na posição: ",i), "UTF-8"))
-            print("Encontrado na posição: ",i)
+            conexao.sendall(bytes(str("Encontrado na posição: "), "UTF-8"))
+            print("Encontrado na posição: ", i)
             print("Processamento Encerrado!")
 
 
+        if vetor[i] != valor:
+            conexao.sendall(bytes(str("Não Encontrado!"), "UTF-8"))
+
         i = i + 1
 
-    conexao.sendall(bytes(str("Não Encontrado!"), "UTF-8"))
     conexao.close()
     print("Processamento Encerrado!")
 
