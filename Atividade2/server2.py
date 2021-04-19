@@ -6,21 +6,35 @@ from threading import Thread
 def processar(conexao, vetor , valor, tam):
     sleep(5)
     print("Processando Requisição...")
+    vetor = vetor[1:-1]
+
+    vetor = vetor.split()
+    tam = int(tam)
     i = 0
-    n = len(vetor) - 1
-    while i < n:
+    n = len(vetor)
+    aux = -1
 
+
+    for i in range(n):
         if vetor[i] == valor:
-            i = i + (tam / 2)
-            conexao.sendall(bytes(str("Encontrado na posição: "), "UTF-8"))
-            print("Encontrado na posição: ", i)
-            print("Processamento Encerrado!")
+            aux = i
+            break
 
 
-        if vetor[i] != valor:
-            conexao.sendall(bytes(str("Não Encontrado!"), "UTF-8"))
 
-        i = i + 1
+    if aux == i:
+
+        aux = int(aux)
+        aux = int (aux + tam)
+        mensagem = "Encontrado na posição: " + str(aux)
+        conexao.sendall(bytes(str(mensagem), "UTF-8"))
+
+        print(mensagem)
+
+    else:
+
+        conexao.sendall(bytes(str("Não Encontrado!"), "UTF-8"))
+        print("Não Encontrado!")
 
     conexao.close()
     print("Processamento Encerrado!")

@@ -14,6 +14,8 @@ def requisicao(vet, val):
     print(array1)
     print(array2)
 
+    tam_array1 = len(array1)
+
     server_info1 = ('127.0.0.1', 3001)
     sck1.connect(server_info1)
     print("Conexao com o servidor1 foi aceita!")
@@ -28,7 +30,7 @@ def requisicao(vet, val):
 
     sck2.sendall(bytes(str(array2), "UTF-8"))
     sck2.sendall(bytes(str(val), "UTF-8"))
-    sck2.sendall(bytes(str(tam), "UTF-8"))
+    sck2.sendall(bytes(str(tam_array1), "UTF-8"))
 
     print("Aguardando dados servidor1...")
     dados_recebidos1 = sck1.recv(1000).decode("UTF-8")
@@ -49,6 +51,5 @@ if __name__ == '__main__':
 
     vet = numpy.random.randint(1, 100, (tam))
     print(vet)
-
     val = int(input('Insira o valor a ser buscado no vetor: '))
     requisicao(vet, val)
